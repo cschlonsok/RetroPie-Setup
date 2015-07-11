@@ -19,22 +19,27 @@ function depends_moonlight() {
 
 
 function install_moonlight() {
-    aptInstall moonlight-embedded
+    #force the installation
+    aptInstall moonlight-embedded --force-yes
 }
 
 function configure_moonlight() {
     # Create romdir moonlight
     mkRomDir "moonlight"
 
+    # Download moonlight simple theme
+    wget https://github.com/cschlonsok/retropie-moonlight-installer/archive/1.0.zip
 
-    # Install moonlight simple theme
-    mkdir -p /etc/emulationstation/themes/simple/moonlight/art
-    cp -v "$md_inst/theme.xml" /etc/emulationstation/themes/simple/moonlight/
-    cp -v "$md_inst/limelight.png" /etc/emulationstation/themes/simple/moonlight/art/
-    cp -v "$md_inst/limelight_art.png" /etc/emulationstation/themes/simple/moonlight/art/
-    cp -v "$md_inst/limelight_art_blur.png" /etc/emulationstation/themes/simple/moonlight/art/
+    unzip 1.0.zip
+    cd retropie-moonlight-installer-1.0
 
 
+    #install moonlight Theme
+    ./install.sh
+
+
+    cd ..
+    rm 1.0.zip
 
 
     # Run moonlight configuration
@@ -92,7 +97,7 @@ _EOF_
     chmod +x "$romdir/moonlight/"*.sh
 
     # Add System to es_system.cfg
-    setESSystem 'moonlight Game Streaming' 'moonlight' '~/RetroPie/roms/moonlight' '.sh .SH' '%ROM%' 'pc' 'ports'
+    setESSystem 'moonlight Game Streaming' 'moonlight' '~/RetroPie/roms/moonlight' '.sh .SH' '%ROM%' 'pc' 'moonlight'
 
     echo "##########################"
     echo "##########################"
